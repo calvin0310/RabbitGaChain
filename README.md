@@ -1,2 +1,2 @@
 # RabbitGaChain
-Blockchain of RabbitGather
+The Blockchain of RabbitGather
