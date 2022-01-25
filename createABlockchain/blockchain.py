@@ -3,23 +3,23 @@
 import datetime
 import hashlib
 import json
-from flask import Flask, jsonify
 
 # Building a Blockchain
+
 
 class Blockchain:
     def __init__(self):
         self.chain = []
         # genesis block: first block
-        self.create_block(proof = 1, previous_hash = '0')
-    
+        self.create_block(proof=1, previous_hash='0')
+
     def create_block(self, proof, previous_hash):
         # add anything you want to dict
         block = {'index': len(self.chain) + 1,
                  'timestamp': str(datetime.datetime.now()),
                  'proof': proof,
                  'previous_hash': previous_hash}
-                # add anything into block
+        # add anything into block
         self.chain.append(block)
         return block
 
@@ -34,20 +34,21 @@ class Blockchain:
 
             # new_proof + previous_proof is symmetrical
             # to be non symmetrical
-            hash_operation = hashlib.sha256(str(new_proof**2 - previous_proof**2).encode()).hexdigest()
-            
+            hash_operation = hashlib.sha256(
+                str(new_proof**2 - previous_proof**2).encode()).hexdigest()
+
             if hash_operation[:4] == '0000':
                 check_proof = True
             else:
                 new_proof += 1
-        
+
         return new_proof
 
     def hash(self, block):
         # ex: b'5', there is a b, because of encoded, b means bytes
-        encoded_block = json.dumps(block, sort_keys = True).encoded()
+        encoded_block = json.dumps(block, sort_keys=True).encode()
         return hashlib.sha256(encoded_block).hexdigest()
-    
+
     def is_chain_valid(self, chain):
         previous_block = chain[0]
         block_index = 1
@@ -57,13 +58,13 @@ class Blockchain:
                 return False
             previous_proof = previous_block['proof']
             proof = block['proof']
-            hash_operation = hashlib.sha256(str(proof**2 - previous_proof**2).encode()).hexdigest()
+            hash_operation = hashlib.sha256(
+                str(proof**2 - previous_proof**2).encode()).hexdigest()
             if hash_operation[:4] != '0000':
                 return False
             previous_block = block
             block_index += 1
         return True
-    
-    
+
 
 
